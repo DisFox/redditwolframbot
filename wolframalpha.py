@@ -10,7 +10,9 @@ def getimportant(xml):
         root = ET.fromstring(xml)
         for child in root.iter('pod'):
                 title = child.attrib['id']
-                if title == 'Input' or title == 'Result':
+                if child.attrib['title'] == 'Result':
+                        title = child.attrib['title']
+                if title == 'Input' or title == 'Result' or child.attrib['title'] == 'Result':
                         important[title] = child[0][0].text.encode('utf-8')
         return important
 
