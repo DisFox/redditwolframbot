@@ -1,7 +1,7 @@
-import requests, time, praw, xml.etree.ElementTree as ET, os, re
+import urllib, requests, time, praw, xml.etree.ElementTree as ET, os, re
 
 def getdata(mathstring,appid):
-        url = 'http://api.wolframalpha.com/v2/query?input=' + mathstring + '&appid=' + appid + '&format=plaintext'
+        url = 'http://api.wolframalpha.com/v2/query?input=' + urllib.quote(mathstring) + '&appid=' + appid + '&format=plaintext'
         r = requests.get(url)
         return r.text.encode('utf-8')
 
