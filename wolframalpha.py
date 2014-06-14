@@ -3,7 +3,7 @@ import urllib, requests, time, praw, xml.etree.ElementTree as ET, os, re
 def getdata(mathstring,appid):
         url = 'http://api.wolframalpha.com/v2/query?input=' + urllib.quote(mathstring) + '&appid=' + appid + '&format=plaintext'
         r = requests.get(url)
-        return r.text.encode('utf-8')
+        return r.text.encode('utf8')
         
 def getimportant(xml):
         important = {} # enter the fields you wish the bot to print in desiredfields
@@ -40,7 +40,7 @@ def main():
                                         try:
                                                 print 'Found Comment: ' + str(commentid)
                                                 regex = re.compile(r'@wolfram_bot\[.*\]')
-                                                findall = regex.findall(str(body))
+                                                findall = regex.findall(body.encode('utf8'))
                                                 redditinput = findall[0]
                                                 redditinput = redditinput[13:-1]
                                                 data = getimportant(getdata(redditinput,appid))
