@@ -4,15 +4,16 @@ def getdata(mathstring,appid):
         url = 'http://api.wolframalpha.com/v2/query?input=' + urllib.quote(mathstring) + '&appid=' + appid + '&format=plaintext'
         r = requests.get(url)
         return r.text.encode('utf-8')
-
+        
 def getimportant(xml):
-        important = {}
+        important = {} # enter the fields you wish the bot to print in desiredfields
+        desiredfields = ['Input','Decimal approximation','Property','Continued fraction','Series representations','Integral representations','Result']
         root = ET.fromstring(xml)
         for child in root.iter('pod'):
-                title = child.attrib['id']
-                if child.attrib['title'] == 'Result':
-                        title = child.attrib['title']
-                if title == 'Input' or title == 'Result' or child.attrib['title'] == 'Result':
+                print str(child)
+                title = child.attrib['title']
+                pid = child.attrib['id']
+                if title in desiredfields or pid in desiredfields:
                         important[title] = child[0][0].text.encode('utf-8')
         return important
 
@@ -46,7 +47,7 @@ def main():
                                                 data = getimportant(getdata(redditinput,appid))
                                                 rcomment = []
                                                 for d in data:
-                                                        rcomment.append(d + ':')
+                                                        rcomment.append('**' + d + ':' + '**')
                                                         rcomment.append(data[d])
                                                 rcomment =  '\r\n\r\n'.join(rcomment)
                                                 try:
