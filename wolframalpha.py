@@ -6,14 +6,22 @@ def getdata(mathstring,appid):
         return r.text.encode('utf8')
         
 def getimportant(xml):
-        important = {} # enter the fields you wish the bot to print in desiredfields
-        desiredfields = ['Input','Decimal approximation','Property','Continued fraction','Series representations','Integral representations','Result']
+        important = {}
+        blacklist = ['PropertiesAsARealFunction']
         root = ET.fromstring(xml)
         for child in root.iter('pod'):
-                title = child.attrib['title']
-                pid = child.attrib['id']
-                if title in desiredfields or pid in desiredfields:
-                        important[title] = child[0][0].text.encode('utf-8')
+                try:
+                        title = child.attrib['title']
+                        pid = child.attrib['id']
+                        if pid not in blacklist:
+                                data = []
+                                for subpod in child.findall('subpod'):
+                                        for plaintext in subpod.findall('plaintext'):
+                                                data.append(plaintext.text)
+                                if data != []:
+                                        important[title] = '\r\n\r\n'.join(data).encode('utf8')
+                except TypeError:
+                        pass
         return important
 
 def main():
