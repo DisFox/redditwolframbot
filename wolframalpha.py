@@ -46,18 +46,22 @@ def main():
                                                 data = getimportant(getdata(redditinput,appid))
                                                 rcomment = []
                                                 for d in data:
-                                                        rcomment.append(d)
+                                                        rcomment.append(d + ':')
                                                         rcomment.append(data[d])
                                                 rcomment =  '\r\n\r\n'.join(rcomment)
-                                                comment.reply(rcomment)
-                                                print 'Replied to ' + commentid
+                                                try:
+                                                        comment.reply(rcomment)
+                                                except:
+                                                        comment.reply('Invalid Query')
+                                                print 'Replied to ' + commentid + '. Sleeping for 10 Minutes'
                                                 with open("wolframids.txt","a+") as w:
                                                         w.write(commentid + '\n')
                                                         alreadyposted.append(commentid)
-                                                time.sleep(60)
+                                                time.sleep(0)
                                         except Exception as e:
                                                 print 'Error: ' + str(e)
-                time.sleep(20)
+                print 'done'
+                time.sleep(10)
 
 if __name__ == '__main__':
         main()
