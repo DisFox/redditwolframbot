@@ -10,7 +10,6 @@ def getimportant(xml):
         desiredfields = ['Input','Decimal approximation','Property','Continued fraction','Series representations','Integral representations','Result']
         root = ET.fromstring(xml)
         for child in root.iter('pod'):
-                print str(child)
                 title = child.attrib['title']
                 pid = child.attrib['id']
                 if title in desiredfields or pid in desiredfields:
