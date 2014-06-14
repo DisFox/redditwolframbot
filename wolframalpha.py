@@ -57,7 +57,6 @@ def main():
                                                 with open("wolframids.txt","a+") as w:
                                                         w.write(commentid + '\n')
                                                         alreadyposted.append(commentid)
-                                                time.sleep(0)
                                         except Exception as e:
                                                 print 'Error: ' + str(e)
                 print 'done'
