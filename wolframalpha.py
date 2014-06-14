@@ -1,0 +1,58 @@
+import requests, time, praw, xml.etree.ElementTree as ET, os, re
+
+def getdata(mathstring,appid):
+        url = 'http://api.wolframalpha.com/v2/query?input=' + mathstring + '&appid=' + appid + '&format=plaintext'
+        r = requests.get(url)
+        return r.text.encode('utf-8')
+
+def getimportant(xml):
+        important = {}
+        root = ET.fromstring(xml)
+        for child in root.iter('pod'):
+                title = child.attrib['id']
+                if title == 'Input' or title == 'Result':
+                        important[title] = child[0][0].text.encode('utf-8')
+        return important
+
+def main():
+        if os.path.exists("wolframids.txt") != True:
+                with open("wolframids.txt",'w') as w:
+                        alreadyposted = []                        #Creates database if it doesn't exist, reads if it does
+        else:
+                with open("wolframids.txt","a+") as w:
+                        alreadyposted = w.read().splitlines()
+                        
+        appid = '' # Your Wolfram Alpha appid
+        r = praw.Reddit(user_agent='Wolfram Alpha Bot') # Useragent
+        r.login('','') # Reddit udername and password
+        subreddit = '' #This is the sub or list of subs to scan for new posts. For a single sub, use "sub1". For multiple subreddits, use "sub1+sub2+sub3+..."
+        limit = 100 # how many posts to get
+        while True:
+                sub = r.get_subreddit(subreddit)
+                comments = sub.get_comments(limit=limit)
+                for comment in comments:
+                        commentid = comment.id
+                        if commentid not in alreadyposted:
+                                body = comment.body.lower()
+                                if body.find('@wolfram_bot[') != -1:
+                                        print 'Found Comment: ' + str(commentid)
+                                        regex = re.compile(r'@wolfram_bot\[.*\]')
+                                        findall = regex.findall(str(body))
+                                        redditinput = findall[0]
+                                        redditinput = redditinput[13:-1]
+                                        data = getimportant(getdata(redditinput,appid))
+                                        rcomment = []
+                                        for d in data:
+                                                rcomment.append(d)
+                                                rcomment.append(data[d])
+                                        rcomment =  '\r\n\r\n'.join(rcomment)
+                                        comment.reply(rcomment)
+                                        print 'Replied to ' + commentid + '. Sleeping for 10 Minutes'
+                                        with open("wolframids.txt","a+") as w:
+                                                w.write(commentid + '\n')
+                                                alreadyposted.append(commentid)
+                                        time.sleep(600)
+                time.sleep(20)
+
+if __name__ == '__main__':
+        main()
