@@ -48,7 +48,6 @@ def main():
                                                         rcomment.append(data[d])
                                                 rcomment =  '\r\n\r\n'.join(rcomment)
                                                 comment.reply(rcomment)
-                                                print 'Replied to ' + commentid + '. Sleeping for 10 Minutes'
                                                 with open("wolframids.txt","a+") as w:
                                                         w.write(commentid + '\n')
                                                         alreadyposted.append(commentid)
