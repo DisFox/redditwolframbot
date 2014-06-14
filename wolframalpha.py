@@ -35,23 +35,26 @@ def main():
                         if commentid not in alreadyposted:
                                 body = comment.body.lower()
                                 if body.find('@wolfram_bot[') != -1:
-                                        print 'Found Comment: ' + str(commentid)
-                                        regex = re.compile(r'@wolfram_bot\[.*\]')
-                                        findall = regex.findall(str(body))
-                                        redditinput = findall[0]
-                                        redditinput = redditinput[13:-1]
-                                        data = getimportant(getdata(redditinput,appid))
-                                        rcomment = []
-                                        for d in data:
-                                                rcomment.append(d)
-                                                rcomment.append(data[d])
-                                        rcomment =  '\r\n\r\n'.join(rcomment)
-                                        comment.reply(rcomment)
-                                        print 'Replied to ' + commentid + '. Sleeping for 10 Minutes'
-                                        with open("wolframids.txt","a+") as w:
-                                                w.write(commentid + '\n')
-                                                alreadyposted.append(commentid)
-                                        time.sleep(600)
+                                        try:
+                                                print 'Found Comment: ' + str(commentid)
+                                                regex = re.compile(r'@wolfram_bot\[.*\]')
+                                                findall = regex.findall(str(body))
+                                                redditinput = findall[0]
+                                                redditinput = redditinput[13:-1]
+                                                data = getimportant(getdata(redditinput,appid))
+                                                rcomment = []
+                                                for d in data:
+                                                        rcomment.append(d)
+                                                        rcomment.append(data[d])
+                                                rcomment =  '\r\n\r\n'.join(rcomment)
+                                                comment.reply(rcomment)
+                                                print 'Replied to ' + commentid + '. Sleeping for 10 Minutes'
+                                                with open("wolframids.txt","a+") as w:
+                                                        w.write(commentid + '\n')
+                                                        alreadyposted.append(commentid)
+                                                time.sleep(60)
+                                        except Exception as e:
+                                                print 'Error: ' + str(e)
                 time.sleep(20)
 
 if __name__ == '__main__':
