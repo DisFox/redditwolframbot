@@ -53,7 +53,7 @@ def main():
                                                         comment.reply(rcomment)
                                                 except:
                                                         comment.reply('Invalid Query')
-                                                print 'Replied to ' + commentid + '. Sleeping for 10 Minutes'
+                                                print 'Replied to ' + commentid
                                                 with open("wolframids.txt","a+") as w:
                                                         w.write(commentid + '\n')
                                                         alreadyposted.append(commentid)
