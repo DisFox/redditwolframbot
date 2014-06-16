@@ -29,7 +29,7 @@ def getimportant(xml):
                                                 ititle = image.attrib['title']
                                                 if ititle == '':
                                                         ititle = title
-                                                images.append('[' + ititle + '](' + image.attrib['src'] + '.gif)')
+                                                images.append('[' + redditescape(ititle) + '](' + image.attrib['src'] + '.gif)')
                                 if data != []:
                                         escapeddata = []
                                         for d in data:
