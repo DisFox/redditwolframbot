@@ -6,7 +6,6 @@ def redditescape(string):
                 string = string.replace(char, '\\' + char)
         return string
 
-
 def getdata(mathstring,appid):
         url = 'http://api.wolframalpha.com/v2/query?input=' + urllib.quote(mathstring) + '&appid=' + appid + '&format=plaintext'
         r = requests.get(url)
@@ -30,7 +29,7 @@ def getimportant(xml):
                                                 ititle = image.attrib['title']
                                                 if ititle == '':
                                                         ititle = title
-                                                images.append('[' + ititle + '](' + image.attrib['src'] + ')')
+                                                images.append('[' + ititle + '](' + image.attrib['src'] + '.gif)')
                                 if data != []:
                                         escapeddata = []
                                         for d in data:
@@ -40,7 +39,6 @@ def getimportant(xml):
                 except TypeError:
                         pass
         return important
-
 
 def main():
         if os.path.exists("wolframids.txt") != True:
@@ -52,12 +50,9 @@ def main():
                         
         appid = '' # Your Wolfram Alpha appid
         r = praw.Reddit(user_agent='Wolfram Alpha Bot') # Useragent
-        r.login('','') # Reddit udername and password
+        r.login('','') # Reddit username and password
         subreddit = '' #This is the sub or list of subs to scan for new posts. For a single sub, use "sub1". For multiple subreddits, use "sub1+sub2+sub3+..."
-        #limit = 100 # how many posts to get
         while True:
-                #sub = r.get_subreddit(subreddit)
-                #comments = sub.get_comments(limit=limit)
                 for comment in praw.helpers.comment_stream(r,subreddit,limit = None, verbosity=0):#in comments:
                         commentid = comment.id
                         if commentid not in alreadyposted:
