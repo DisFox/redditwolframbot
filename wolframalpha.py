@@ -28,7 +28,7 @@ def getimportant(xml):
                                                         ititle = title
                                                 images.append('[' + redditescape(ititle) + '](' + image.attrib['src'] + '.gif)')
                                 if images != []:
-                                        important[title] = '\r\n\r\n'.join(images).encode('utf8')
+                                        important[title] = '\r\n\r\n'.join(images).encode('utf8').decode('utf8')
                 except TypeError:
                         pass
         return important
