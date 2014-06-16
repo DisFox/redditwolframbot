@@ -1,5 +1,12 @@
 import urllib, requests, time, praw, xml.etree.ElementTree as ET, os, re
 
+def redditescape(string):
+        escape = '\\`*_{}[]()#+-.!^'
+        for char in escape:
+                string = string.replace(char, '\\' + char)
+        return string
+
+
 def getdata(mathstring,appid):
         url = 'http://api.wolframalpha.com/v2/query?input=' + urllib.quote(mathstring) + '&appid=' + appid + '&format=plaintext'
         r = requests.get(url)
@@ -19,7 +26,11 @@ def getimportant(xml):
                                         for plaintext in subpod.findall('plaintext'):
                                                 data.append(plaintext.text)
                                 if data != []:
-                                        important[title] = '\r\n\r\n'.join(data).encode('utf8')
+                                        escapeddata = []
+                                        for d in data:
+                                                if d != None:
+                                                        escapeddata.append(redditescape(d))
+                                        important[title] = '\r\n\r\n'.join(escapeddata).encode('utf8')
                 except TypeError:
                         pass
         return important
