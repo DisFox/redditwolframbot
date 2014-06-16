@@ -22,18 +22,25 @@ def getimportant(xml):
                         pid = child.attrib['id']
                         if pid not in blacklist:
                                 data = []
+                                images = []
                                 for subpod in child.findall('subpod'):
                                         for plaintext in subpod.findall('plaintext'):
                                                 data.append(plaintext.text)
+                                        for image in subpod.findall('img'):
+                                                ititle = image.attrib['title']
+                                                if ititle == '':
+                                                        ititle = title
+                                                images.append('[' + ititle + '](' + image.attrib['src'] + ')')
                                 if data != []:
                                         escapeddata = []
                                         for d in data:
                                                 if d != None:
                                                         escapeddata.append(redditescape(d))
-                                        important[title] = '\r\n\r\n'.join(escapeddata).encode('utf8')
+                                        important[title] = '\r\n\r\n'.join(escapeddata).encode('utf8') + '\r\n\r\n' + '\r\n\r\n'.join(images).encode('utf8')
                 except TypeError:
                         pass
         return important
+
 
 def main():
         if os.path.exists("wolframids.txt") != True:
