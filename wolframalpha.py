@@ -13,7 +13,7 @@ def getdata(mathstring,appid):
         
 def getimportant(xml):
         important = {}
-        blacklist = ['PropertiesAsARealFunction']
+        blacklist = [] #Blacklisted returns
         root = ET.fromstring(xml)
         for child in root.iter('pod'):
                 try:
