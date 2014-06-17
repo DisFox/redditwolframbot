@@ -1,7 +1,7 @@
 import urllib, requests, time, praw, xml.etree.ElementTree as ET, os, re
 
 def redditescape(string):
-        escape = '\\`*_{}[]()#+-.!^'
+        escape = '\\`*_{}[]()#+-.!^~'
         for char in escape:
                 string = string.replace(char, '\\' + char)
         return string
