@@ -46,34 +46,36 @@ def main():
         r.login('','') # Reddit username and password
         subreddit = '' #This is the sub or list of subs to scan for new posts. For a single sub, use "sub1". For multiple subreddits, use "sub1+sub2+sub3+..."
         while True:
-                for comment in praw.helpers.comment_stream(r,subreddit,limit = None, verbosity=0):#in comments:
-                        commentid = comment.id
-                        if commentid not in alreadyposted:
-                                body = comment.body.lower()
-                                if body.find('@wolfram_bot[') != -1:
-                                        try:
-                                                print 'Found Comment: ' + str(commentid)
-                                                regex = re.compile(r'@wolfram_bot\[.*\]')
-                                                findall = regex.findall(body.encode('utf8'))
-                                                redditinput = findall[0]
-                                                redditinput = redditinput[13:-1]
-                                                data = getimportant(getdata(redditinput,appid))
-                                                rcomment = []
-                                                for d in data:
-                                                        rcomment.append('**' + d + ':' + '**')
-                                                        rcomment.append(data[d])
-                                                rcomment =  '\r\n\r\n'.join(rcomment)
+                try:
+                        for comment in praw.helpers.comment_stream(r,subreddit,limit = None, verbosity=0):#in comments:
+                                commentid = comment.id
+                                if commentid not in alreadyposted:
+                                        body = comment.body.lower()
+                                        if body.find('@wolfram_bot[') != -1:
                                                 try:
-                                                        comment.reply(rcomment)
-                                                except:
-                                                        comment.reply('Invalid Query')
-                                                print 'Replied to ' + commentid
-                                                with open("wolframids.txt","a+") as w:
-                                                        w.write(commentid + '\n')
-                                                        alreadyposted.append(commentid)
-                                        except Exception as e:
-                                                print 'Error: ' + str(e)
-                print 'done'
+                                                        print 'Found Comment: ' + str(commentid)
+                                                        regex = re.compile(r'@wolfram_bot\[.*\]')
+                                                        findall = regex.findall(body.encode('utf8'))
+                                                        redditinput = findall[0]
+                                                        redditinput = redditinput[13:-1]
+                                                        data = getimportant(getdata(redditinput,appid))
+                                                        rcomment = []
+                                                        for d in data:
+                                                                rcomment.append('**' + d + ':' + '**')
+                                                                rcomment.append(data[d])
+                                                        rcomment =  '\r\n\r\n'.join(rcomment)
+                                                        try:
+                                                                comment.reply(rcomment)
+                                                        except:
+                                                                comment.reply('Invalid Query')
+                                                        print 'Replied to ' + commentid
+                                                        with open("wolframids.txt","a+") as w:
+                                                                w.write(commentid + '\n')
+                                                                alreadyposted.append(commentid)
+                                                except Exception as e:
+                                                        print 'Posting error', e
+                except Exception as e:
+                        print 'Stream error',e
                 time.sleep(10)
 
 if __name__ == '__main__':
